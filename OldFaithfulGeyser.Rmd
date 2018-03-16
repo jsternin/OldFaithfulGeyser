@@ -1,0 +1,67 @@
+---
+title: "OldFaithfulGeyser"
+author: "Jeff Sternin"
+date: "March 15, 2018"
+output: ioslides_presentation
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## 1. Summary
+
+We provide interactive Shiny application based on data collected on YeallowStone Park Old Faithful Gyser.  
+[Old Faithful Geyser](http://www.wildnatureimages.com/Old-Faithful-Geyser-Photos.htm)  
+
+This application show histograms of waiting time to next eruption, eruptions duration.    
+Also allows to investigate relationship between eruption time and waiting time until next eruption.    
+Here's the link to shiny app.    
+[Old Faithful Geyser App](https://devdataproducts.shinyapps.io/DevDataProducts/)  
+This application shows 3 interactive tabs:  
+1. Waiting time histogram  
+2. Eruption time histogram   
+3. Linear regression between eruptions time and waiting time to next eruption,  
+based on user selection of data points  
+[github repository](https://github.com/jsternin/OldFaithfulGeyser)
+
+## 2. Tab panels: Histograms - Waiting time, Eruptions time   
+
+Waiting time histogram shows distribution of wait time until   
+next eruptions. User can control number of bins in histogram   
+using first slider. First slider name "Waiting (min)" controls  
+number of bins in historgram. Make sure that First tab panel   
+("Waiting (min) Histogram") is selected. Default number of   
+bins is 30. Waiting time is between 50 and 90 min.  
+Eruptions time histogram shows distribution of Eruptions time.      
+User can control number of bins in histogram using   
+second slider. Second slider name "Eruptions (min)" controls  
+number of bins in historgram. Make sure that Second tab panel  
+("Eruptions (min) Histogram") is selected. 
+Eruptions time is between 1.5 and 5 min.  
+
+## 3. Tab panel: Eruptions~waiting regression
+
+Tab Eruptions-waiting time shows points in coordinates   
+X-eruption time, Y- waiting time until next eruption.  
+User can select (swipe) any subset of points and   
+regression line will be interactively built showing    
+Slope, Intersect and Ajusted Sum of Squares.  
+Ajusted sum of suares is $adjSumSq = 1-RSS/TSS$  
+where $RSS = sum((data - fitted)^{2}$ 
+$TSS = sum((data - mean(data)^{2})$   
+Ajusted sum of suares shows percentage of data     
+that model explains. Next slide shows regression  
+line when all points are selected.
+
+***
+
+```{r pressure}
+plot(faithful$eruptions, faithful$waiting,  xlab = "eruptions (min)",
+         ylab = "waiting (min)", main = "Old Faithful Geyser",
+         cex = 1.5, pch = 16, bty = "n")
+fit <- lm(waiting~ eruptions, data=faithful)
+abline(fit, col = "blue", lwd = 2)
+print(sprintf("Slope: %4.2f Intercept:%4.2f Adj R squared: :%4.3f  ",
+              fit[[1]][2],fit[[1]][1],summary(fit)[[9]]))
+```
+
